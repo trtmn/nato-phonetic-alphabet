@@ -12,7 +12,7 @@ from .core import spell_word, get_full_alphabet
 console = Console()
 
 PROJECT_NAME = "phonetic"
-PROJECT_VERSION = "0.1.0"
+PROJECT_VERSION = "0.2.0"
 PROJECT_DESC = (
     "A beautiful CLI for the NATO phonetic alphabet built with "
     "Python, Click, and Rich."
