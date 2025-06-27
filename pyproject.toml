@@ -7,7 +7,7 @@ name = "phonetic-nato"
 version = "0.1.0"
 description = "A beautiful CLI for the NATO phonetic alphabet built with Python, Click, and Rich"
 readme = "README.md"
-license = {text = "Creative Commons Attribution-ShareAlike 4.0 International"}
+license = {file = "LICENSE"}
 authors = [
     {name = "Matt (Fishy) Troutman", email = "git@trtmn.com"}
 ]
@@ -109,4 +109,45 @@ module = [
     "click.*",
     "rich.*",
 ]
-ignore_missing_imports = true 
+ignore_missing_imports = true
+
+[tool.bumpversion]
+current_version = "0.1.0"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+serialize = ["{major}.{minor}.{patch}"]
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "src/nato_phonetic/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "src/nato_phonetic/cli.py"
+search = 'PROJECT_VERSION = "{current_version}"'
+replace = 'PROJECT_VERSION = "{new_version}"'
+
+[tool.bumpversion.part.major]
+optional_value = 1
+first_value = 0
+serialize = ["{value}"]
+search = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+replace = "{new_major}.{new_minor}.{new_patch}"
+
+[tool.bumpversion.part.minor]
+optional_value = 1
+first_value = 0
+serialize = ["{value}"]
+search = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+replace = "{new_major}.{new_minor}.{new_patch}"
+
+[tool.bumpversion.part.patch]
+optional_value = 1
+first_value = 0
+serialize = ["{value}"]
+search = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+replace = "{new_major}.{new_minor}.{new_patch}" 
