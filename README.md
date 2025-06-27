@@ -54,33 +54,33 @@ A beautiful and easy-to-use CLI built with Python 3.11, Click, and Rich for disp
 
 **Display the full NATO phonetic alphabet:**
 ```bash
-nato-phonetic
+phonetic
 ```
 
 **Look up a specific letter:**
 ```bash
-nato-phonetic lookup A
+phonetic lookup A
 ```
 
 **Spell out a word:**
 ```bash
-nato-phonetic spell "HELLO"
+phonetic spell "HELLO"
 ```
 
 **Interactive spelling mode:**
 ```bash
-nato-phonetic interactive
+phonetic interactive
 ```
 
 **Generate printable output:**
 ```bash
-nato-phonetic print --output nato-alphabet.txt
+phonetic print --output nato-alphabet.txt
 ```
 
 #### Command Options
 
 ```bash
-nato-phonetic --help
+phonetic --help
 ```
 
 Available commands:
@@ -94,15 +94,15 @@ Available commands:
 
 ```bash
 # Look up a letter
-nato-phonetic lookup X
+phonetic lookup X
 # Output: X - X-ray
 
 # Spell a word
-nato-phonetic spell "WORLD"
+phonetic spell "WORLD"
 # Output: W - Whiskey, O - Oscar, R - Romeo, L - Lima, D - Delta
 
 # Interactive mode
-nato-phonetic interactive
+phonetic interactive
 # Enter words to spell them out interactively
 ```
 

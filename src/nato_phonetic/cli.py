@@ -14,26 +14,77 @@ from .core import lookup_letter, spell_word, get_full_alphabet
 
 console = Console()
 
+PROJECT_NAME = "phonetic"
+PROJECT_VERSION = "0.1.0"
+PROJECT_DESC = (
+    "A beautiful CLI for the NATO phonetic alphabet built with "
+    "Python, Click, and Rich."
+)
+PROJECT_AUTHOR = "trtmn <trtmn@trtmn.io>"
 
-@click.group(invoke_without_command=True)
-@click.argument("word", required=False)
-@click.version_option(version="0.1.0", prog_name="nato-phonetic")
+
+class PhoneticGroup(click.Group):
+    def format_help(self, ctx: click.Context,
+                   formatter: click.HelpFormatter) -> None:
+        # Use Rich for project info
+        console.print(f"[bold cyan]{PROJECT_NAME}[/bold cyan] "
+                     f"[green]v{PROJECT_VERSION}[/green]")
+        console.print(f"[italic]{PROJECT_DESC}[/italic]")
+        console.print(f"[yellow]Author:[/] {PROJECT_AUTHOR}\n")
+
+        # Use Rich for usage and examples
+        usage = (f"Usage: [bold magenta]{ctx.command_path}[/bold magenta] "
+                f"[OPTIONS] [WORD] COMMAND [ARGS]...")
+        console.print(usage)
+        console.print()
+        console.print(Panel.fit(
+            "[b]Examples:[/b]\n"
+            "[cyan]phonetic 'HELLO'[/cyan]     # Spell out HELLO\n"
+            "[cyan]phonetic spell 'HELLO'[/cyan]  # Same as above\n"
+            "[cyan]phonetic lookup A[/cyan]    # Look up letter A\n"
+            "[cyan]phonetic list[/cyan]        # Show full alphabet",
+            border_style="magenta",
+            title="Examples"
+        ))
+        console.print()
+
+        # Capture the rest of the help output from Click and print with Rich
+        with console.capture() as capture:
+            super().format_help(ctx, formatter)
+        help_text = capture.get()
+        # Remove the first usage and examples from Click's help
+        help_lines = help_text.splitlines()
+        # Find the start of Options/Commands
+        for i, line in enumerate(help_lines):
+            if (line.strip().startswith("Options:") or
+                    line.strip().startswith("Commands:")):
+                help_lines = help_lines[i:]
+                break
+        # Print the rest with Rich
+        console.print("\n".join(help_lines))
+
+
+@click.group(cls=PhoneticGroup, invoke_without_command=True)
+@click.version_option(version=PROJECT_VERSION, prog_name=PROJECT_NAME)
 @click.pass_context
-def main(ctx: click.Context, word: Optional[str]) -> None:
+def main(ctx: click.Context) -> None:
     """NATO Phonetic Alphabet CLI - Beautiful terminal interface.
     
     If a word is provided without a command, it will be spelled out using 
     the NATO phonetic alphabet.
     
     Examples:
-        nato-phonetic "HELLO"     # Spell out HELLO
-        nato-phonetic spell "HELLO"  # Same as above
-        nato-phonetic lookup A    # Look up letter A
-        nato-phonetic list        # Show full alphabet
+        phonetic "HELLO"     # Spell out HELLO
+        phonetic spell "HELLO"  # Same as above
+        phonetic lookup A    # Look up letter A
+        phonetic list        # Show full alphabet
     """
     if ctx.invoked_subcommand is None:
-        if word:
-            # If no subcommand was invoked but a word was provided, spell it
+        # Check if there are any arguments that aren't options
+        args = [arg for arg in ctx.args if not arg.startswith('-')]
+        if args:
+            # Treat the first non-option argument as a word to spell
+            word = args[0]
             spell_word_command(word)
         else:
             # Show help if no arguments provided
@@ -101,7 +152,8 @@ def interactive() -> None:
 
 
 @main.command()
-@click.option("--output", "-o", type=click.Path(), help="Output file path")
+@click.option("--output", "-o", type=click.Path(), 
+              help="Output file path")
 def print_alphabet(output: Optional[str]) -> None:
     """Display the complete NATO phonetic alphabet."""
     alphabet = get_full_alphabet()
