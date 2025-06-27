@@ -1,8 +1,5 @@
 """Command-line interface for the NATO phonetic alphabet."""
 
-import sys
-from typing import Optional
-
 import click
 from rich.console import Console
 from rich.table import Table
@@ -10,7 +7,7 @@ from rich.box import ROUNDED
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-from .core import lookup_letter, spell_word, get_full_alphabet
+from .core import spell_word, get_full_alphabet
 
 console = Console()
 
@@ -26,59 +23,61 @@ PROJECT_AUTHOR = "trtmn <trtmn@trtmn.io>"
 class PhoneticGroup(click.Group):
     def format_help(self, ctx: click.Context,
                    formatter: click.HelpFormatter) -> None:
-        # Use Rich for project info
-        console.print(f"[bold cyan]{PROJECT_NAME}[/bold cyan] "
-                     f"[green]v{PROJECT_VERSION}[/green]")
-        console.print(f"[italic]{PROJECT_DESC}[/italic]")
-        console.print(f"[yellow]Author:[/] {PROJECT_AUTHOR}\n")
-
-        # Use Rich for usage and examples
-        usage = (f"Usage: [bold magenta]{ctx.command_path}[/bold magenta] "
-                f"[OPTIONS] [WORD] COMMAND [ARGS]...")
-        console.print(usage)
-        console.print()
+        # Usage section
         console.print(Panel.fit(
-            "[b]Examples:[/b]\n"
+            f"{ctx.command_path} [OPTIONS] COMMAND [ARGS]...\n\n"
+            "NATO Phonetic Alphabet CLI - Beautiful terminal interface.\n\n"
+            "If a word is provided without a command, it will be spelled out using "
+            "the NATO phonetic alphabet.",
+            border_style="cyan",
+            title="Usage"
+        ))
+        console.print()
+        
+        # Options section
+        console.print(Panel.fit(
+            "--version  Show the version and exit.\n"
+            "--help     Show this message and exit.",
+            border_style="green",
+            title="Options"
+        ))
+        console.print()
+        
+        # Commands section
+        console.print(Panel.fit(
+            "interactive  Enter interactive mode\n"
+            "list         Show full alphabet",
+            border_style="yellow",
+            title="Commands"
+        ))
+        console.print()
+        
+        # Examples section
+        console.print(Panel.fit(
             "[cyan]phonetic 'HELLO'[/cyan]     # Spell out HELLO\n"
-            "[cyan]phonetic spell 'HELLO'[/cyan]  # Same as above\n"
-            "[cyan]phonetic lookup A[/cyan]    # Look up letter A\n"
+            "[cyan]phonetic interactive[/cyan] # Interactive mode\n"
             "[cyan]phonetic list[/cyan]        # Show full alphabet",
             border_style="magenta",
             title="Examples"
         ))
-        console.print()
-
-        # Capture the rest of the help output from Click and print with Rich
-        with console.capture() as capture:
-            super().format_help(ctx, formatter)
-        help_text = capture.get()
-        # Remove the first usage and examples from Click's help
-        help_lines = help_text.splitlines()
-        # Find the start of Options/Commands
-        for i, line in enumerate(help_lines):
-            if (line.strip().startswith("Options:") or
-                    line.strip().startswith("Commands:")):
-                help_lines = help_lines[i:]
-                break
-        # Print the rest with Rich
-        console.print("\n".join(help_lines))
 
 
 @click.group(cls=PhoneticGroup, invoke_without_command=True)
-@click.version_option(version=PROJECT_VERSION, prog_name=PROJECT_NAME)
+@click.option('--version', is_flag=True, help='Show the version and exit.')
 @click.pass_context
-def main(ctx: click.Context) -> None:
+def main(ctx: click.Context, version: bool = False) -> None:
     """NATO Phonetic Alphabet CLI - Beautiful terminal interface.
     
     If a word is provided without a command, it will be spelled out using 
     the NATO phonetic alphabet.
-    
-    Examples:
-        phonetic "HELLO"     # Spell out HELLO
-        phonetic spell "HELLO"  # Same as above
-        phonetic lookup A    # Look up letter A
-        phonetic list        # Show full alphabet
     """
+    if version:
+        console.print(Panel.fit(
+            f"[bold cyan]{PROJECT_NAME}[/bold cyan] [green]v{PROJECT_VERSION}[/green]",
+            border_style="cyan",
+            title="Version"
+        ))
+        ctx.exit()
     if ctx.invoked_subcommand is None:
         # Check if there are any arguments that aren't options
         args = [arg for arg in ctx.args if not arg.startswith('-')]
@@ -91,40 +90,21 @@ def main(ctx: click.Context) -> None:
             click.echo(ctx.get_help())
 
 
-@main.command()
-@click.argument("letter", type=str)
-def lookup(letter: str) -> None:
-    """Look up the NATO phonetic equivalent for a single letter."""
-    if len(letter) != 1:
-        console.print(
-            f"[red]Error:[/red] Please provide a single letter, got '{letter}'"
-        )
-        sys.exit(1)
-
-    phonetic = lookup_letter(letter)
-    if phonetic:
-        console.print(f"[green]{letter.upper()} - {phonetic}[/green]")
-    else:
-        console.print(
-            f"[red]Error:[/red] No NATO phonetic equivalent found for '{letter}'"
-        )
-        sys.exit(1)
-
-
-@main.command()
-@click.argument("word", type=str)
-def spell(word: str) -> None:
-    """Spell out a word using the NATO phonetic alphabet."""
-    if not word:
-        console.print("[red]Error:[/red] Please provide a word to spell")
-        sys.exit(1)
-
-    spell_word_command(word)
-
-
-@main.command()
-def interactive() -> None:
+@main.command('interactive', short_help="Enter interactive mode", help="Enter interactive mode for spelling words.")
+def interactive_cmd() -> None:
     """Enter interactive mode for spelling words."""
+    interactive_command()
+
+
+@main.command('list', short_help="Show full alphabet", help="Display the complete NATO phonetic alphabet.")
+def list_cmd() -> None:
+    """Display the complete NATO phonetic alphabet."""
+    print_alphabet_command()
+
+
+# Internal functions
+def interactive_command() -> None:
+    """Internal function for interactive mode."""
     console.print(
         Panel.fit(
             "[bold blue]NATO Phonetic Alphabet - Interactive Mode[/bold blue]\n"
@@ -151,46 +131,8 @@ def interactive() -> None:
             break
 
 
-@main.command()
-@click.option("--output", "-o", type=click.Path(), 
-              help="Output file path")
-def print_alphabet(output: Optional[str]) -> None:
-    """Display the complete NATO phonetic alphabet."""
-    alphabet = get_full_alphabet()
-
-    # Create a table for beautiful output with rounded corners
-    table = Table(
-        title="NATO Phonetic Alphabet", 
-        box=ROUNDED
-    )
-    table.add_column("Letter", style="cyan", justify="center")
-    table.add_column("Phonetic", style="green", justify="left")
-
-    # Sort alphabetically
-    for letter in sorted(alphabet.keys()):
-        table.add_row(letter, alphabet[letter])
-
-    if output:
-        # Save to file
-        with open(output, "w") as f:
-            f.write("NATO Phonetic Alphabet\n")
-            f.write("=" * 25 + "\n\n")
-            for letter in sorted(alphabet.keys()):
-                f.write(f"{letter} - {alphabet[letter]}\n")
-        console.print(f"[green]Alphabet saved to {output}[/green]")
-    else:
-        console.print(table)
-
-
-@main.command()
-def list() -> None:
-    """Display the complete NATO phonetic alphabet (alias for print)."""
-    print_alphabet_command()
-
-
-# Alias functions for internal use
 def spell_word_command(word: str) -> None:
-    """Internal function to spell a word (used by interactive mode)."""
+    """Internal function to spell a word."""
     result = spell_word(word)
 
     # Create a table for beautiful output with rounded corners
@@ -213,7 +155,7 @@ def spell_word_command(word: str) -> None:
 
 
 def print_alphabet_command() -> None:
-    """Internal function to print the alphabet (used by list command)."""
+    """Internal function to print the alphabet."""
     alphabet = get_full_alphabet()
 
     # Create a table for beautiful output with rounded corners
