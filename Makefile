@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test format lint clean
+.PHONY: help install install-dev test format lint clean build hatch-build hatch-clean
 
 help: ## Show this help message
 	@echo "Available commands:"
@@ -35,8 +35,20 @@ clean: ## Clean up build artifacts
 	find . -type f -name "*.pyc" -delete
 
 demo: ## Run a quick demo of the CLI
-	nato-phonetic list
+	phonetic list
 	@echo ""
-	nato-phonetic lookup A
+	phonetic lookup A
 	@echo ""
-	nato-phonetic spell "HELLO" 
+	phonetic spell "HELLO"
+
+# Hatch commands
+hatch-build: ## Build package using Hatch
+	hatch build
+
+hatch-clean: ## Clean Hatch build artifacts
+	hatch clean
+
+hatch-publish: ## Publish package using Hatch (if configured)
+	hatch publish
+
+build: hatch-build ## Build package (alias for hatch-build) 

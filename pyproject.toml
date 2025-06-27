@@ -1,9 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
-name = "nato-phonetic"
+name = "phonetic-nato"
 version = "0.1.0"
 description = "A beautiful CLI for the NATO phonetic alphabet built with Python, Click, and Rich"
 readme = "README.md"
@@ -37,18 +37,26 @@ dev = [
 ]
 
 [project.scripts]
-nato-phonetic = "nato_phonetic.cli:main"
+phonetic = "nato_phonetic.entrypoint:entrypoint"
 
 [project.urls]
 Homepage = "https://trtmn.io/nato-phonetic-alphabet"
 Repository = "https://codeberg.org/trtmn/nato-phonetic-alphabet"
 Issues = "https://codeberg.org/trtmn/nato-phonetic-alphabet/issues"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.hatch.build.targets.wheel]
+packages = ["src/nato_phonetic"]
 
-[tool.setuptools.package-data]
-nato_phonetic = ["*.txt", "*.json"]
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/README.md",
+    "/LICENSE",
+    "/pyproject.toml",
+    "/requirements.txt",
+    "/requirements-dev.txt",
+]
 
 [tool.black]
 line-length = 88
