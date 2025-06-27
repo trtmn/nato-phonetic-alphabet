@@ -6,6 +6,7 @@ from typing import Optional
 import click
 from rich.console import Console
 from rich.table import Table
+from rich.box import ROUNDED
 from rich.panel import Panel
 from rich.prompt import Prompt
 
@@ -51,8 +52,11 @@ def spell(word: str) -> None:
 
     result = spell_word(word)
 
-    # Create a table for beautiful output
-    table = Table(title=f"NATO Phonetic Spelling: {word.upper()}")
+    # Create a table for beautiful output with rounded corners
+    table = Table(
+        title=f"NATO Phonetic Spelling: {word.upper()}", 
+        box=ROUNDED
+    )
     table.add_column("Letter", style="cyan", justify="center")
     table.add_column("Phonetic", style="green", justify="left")
 
@@ -102,8 +106,11 @@ def print_alphabet(output: Optional[str]) -> None:
     """Display the complete NATO phonetic alphabet."""
     alphabet = get_full_alphabet()
 
-    # Create a table for beautiful output
-    table = Table(title="NATO Phonetic Alphabet")
+    # Create a table for beautiful output with rounded corners
+    table = Table(
+        title="NATO Phonetic Alphabet", 
+        box=ROUNDED
+    )
     table.add_column("Letter", style="cyan", justify="center")
     table.add_column("Phonetic", style="green", justify="left")
 
@@ -134,8 +141,11 @@ def spell_word_command(word: str) -> None:
     """Internal function to spell a word (used by interactive mode)."""
     result = spell_word(word)
 
-    # Create a table for beautiful output
-    table = Table(title=f"NATO Phonetic Spelling: {word.upper()}")
+    # Create a table for beautiful output with rounded corners
+    table = Table(
+        title=f"NATO Phonetic Spelling: {word.upper()}", 
+        box=ROUNDED
+    )
     table.add_column("Letter", style="cyan", justify="center")
     table.add_column("Phonetic", style="green", justify="left")
 
@@ -154,8 +164,11 @@ def print_alphabet_command() -> None:
     """Internal function to print the alphabet (used by list command)."""
     alphabet = get_full_alphabet()
 
-    # Create a table for beautiful output
-    table = Table(title="NATO Phonetic Alphabet")
+    # Create a table for beautiful output with rounded corners
+    table = Table(
+        title="NATO Phonetic Alphabet", 
+        box=ROUNDED
+    )
     table.add_column("Letter", style="cyan", justify="center")
     table.add_column("Phonetic", style="green", justify="left")
 
