@@ -15,11 +15,29 @@ from .core import lookup_letter, spell_word, get_full_alphabet
 console = Console()
 
 
-@click.group()
+@click.group(invoke_without_command=True)
+@click.argument("word", required=False)
 @click.version_option(version="0.1.0", prog_name="nato-phonetic")
-def main() -> None:
-    """NATO Phonetic Alphabet CLI - Beautiful terminal interface."""
-    pass
+@click.pass_context
+def main(ctx: click.Context, word: Optional[str]) -> None:
+    """NATO Phonetic Alphabet CLI - Beautiful terminal interface.
+    
+    If a word is provided without a command, it will be spelled out using 
+    the NATO phonetic alphabet.
+    
+    Examples:
+        nato-phonetic "HELLO"     # Spell out HELLO
+        nato-phonetic spell "HELLO"  # Same as above
+        nato-phonetic lookup A    # Look up letter A
+        nato-phonetic list        # Show full alphabet
+    """
+    if ctx.invoked_subcommand is None:
+        if word:
+            # If no subcommand was invoked but a word was provided, spell it
+            spell_word_command(word)
+        else:
+            # Show help if no arguments provided
+            click.echo(ctx.get_help())
 
 
 @main.command()
@@ -50,25 +68,7 @@ def spell(word: str) -> None:
         console.print("[red]Error:[/red] Please provide a word to spell")
         sys.exit(1)
 
-    result = spell_word(word)
-
-    # Create a table for beautiful output with rounded corners
-    table = Table(
-        title=f"NATO Phonetic Spelling: {word.upper()}", 
-        box=ROUNDED
-    )
-    table.add_column("Letter", style="cyan", justify="center")
-    table.add_column("Phonetic", style="green", justify="left")
-
-    for letter, phonetic in result:
-        if letter.isspace():
-            table.add_row(letter, "[dim]Space[/dim]")
-        elif not letter.isalnum():
-            table.add_row(letter, "[dim]Special Character[/dim]")
-        else:
-            table.add_row(letter, phonetic)
-
-    console.print(table)
+    spell_word_command(word)
 
 
 @main.command()
