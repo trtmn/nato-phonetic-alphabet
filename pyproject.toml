@@ -7,14 +7,14 @@ name = "phonetic-nato"
 version = "0.1.0"
 description = "A beautiful CLI for the NATO phonetic alphabet built with Python, Click, and Rich"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Creative Commons Attribution-ShareAlike 4.0 International"}
 authors = [
-    {name = "trtmn", email = "trtmn@trtmn.io"}
+    {name = "Matt (Fishy) Troutman", email = "git@trtmn.com"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
-    "License :: OSI Approved :: MIT License",
+    "License :: Creative Commons Attribution-ShareAlike 4.0 International",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
