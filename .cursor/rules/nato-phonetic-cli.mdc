@@ -1,0 +1,70 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# NATO Phonetic Alphabet CLI Project
+
+## Project Overview
+This is a command-line interface for the NATO phonetic alphabet built with Python 3.11, Click, and Rich. The project provides beautiful terminal output and interactive features for working with the NATO phonetic alphabet.
+
+## Key Files and Structure
+
+### Main Documentation
+- [README.md](mdc:README.md) - Complete project documentation with installation, usage, and development guides
+
+### Project Structure
+```
+nato-phonetic-alphabet/
+├── .venv/                 # Virtual environment (Python 3.11+)
+├── src/                   # Source code directory
+│   └── nato_phonetic/     # Main package directory
+├── tests/                 # Test files
+├── requirements.txt       # Python dependencies
+├── pyproject.toml         # Project configuration
+└── README.md             # Project documentation
+```
+
+## Core Dependencies
+- **Python 3.11+**: Minimum Python version required
+- **Click**: Command-line interface creation kit
+- **Rich**: Rich text and beautiful formatting in the terminal
+
+## CLI Commands
+The main CLI entry point is `nato-phonetic` with the following commands:
+- `lookup <letter>` - Find phonetic equivalent for a single letter
+- `spell <word>` - Spell out a word using NATO phonetic alphabet
+- `interactive` - Enter interactive mode for spelling words
+- `print` - Generate formatted output for printing
+- `list` - Display the complete NATO phonetic alphabet
+
+## Development Guidelines
+
+### Virtual Environment
+- Always use `.venv` directory (never `venv`)
+- Virtual environment should be located at project root
+- Activate with: `source .venv/bin/activate` (macOS/Linux) or `.venv\Scripts\activate` (Windows)
+
+### Installation Process
+1. Create virtual environment: `python3.11 -m venv .venv`
+2. Activate virtual environment
+3. Install dependencies: `pip install -r requirements.txt`
+4. Install CLI: `pip install -e .`
+
+### Testing
+- Use pytest for testing
+- Test files located in `tests/` directory
+- Run tests with: `pytest tests/`
+
+## Features to Implement
+- Beautiful terminal output with Rich formatting
+- Letter and word lookup functionality
+- Interactive spelling mode
+- Printable output generation
+- Fast and lightweight performance
+
+## Code Style
+- Use functional programming approach
+- Follow Python 3.11+ best practices
+- Ensure proper error handling
+- Include comprehensive documentation
