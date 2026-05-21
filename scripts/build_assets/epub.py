@@ -7,6 +7,7 @@ from ebooklib import epub
 from nato_phonetic.core import NATO_PHONETIC_ALPHABET
 
 from . import config
+from ._zip_util import normalize_zip
 
 
 def _row_html(letter: str) -> str:
@@ -19,6 +20,7 @@ def build_epub(dest: Path) -> None:
     book.set_title(config.TITLE)
     book.set_language("en")
     book.add_author("Matt Troutman")
+    book.add_metadata(None, "meta", "2024-01-01T00:00:00Z", {"property": "dcterms:modified"})
 
     rows = "\n".join(_row_html(chr(c)) for c in range(ord("A"), ord("Z") + 1))
     body = f"""
@@ -54,3 +56,4 @@ def build_epub(dest: Path) -> None:
     book.spine = ["nav", chapter]
 
     epub.write_epub(str(dest), book)
+    normalize_zip(dest)

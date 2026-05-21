@@ -8,6 +8,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
     Image,
     Paragraph,
@@ -143,4 +144,9 @@ def build_pdf(landscape: bool, dest: Path) -> None:
         Spacer(1, 0.1 * inch),
         Image(str(config.CC_ICON_PATH), width=88, height=31, hAlign="CENTER"),
     ]
-    doc.build(story)
+    doc.build(story, canvasmaker=_invariant_canvas)
+
+
+def _invariant_canvas(filename, *args, **kwargs):
+    kwargs["invariant"] = 1
+    return Canvas(filename, *args, **kwargs)

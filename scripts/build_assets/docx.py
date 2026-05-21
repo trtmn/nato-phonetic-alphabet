@@ -1,5 +1,6 @@
 """DOCX generator: matches the PDF's two-column layout where DOCX allows."""
 
+from datetime import datetime
 from pathlib import Path
 
 from docx import Document
@@ -12,6 +13,7 @@ from docx.shared import Pt, RGBColor
 from nato_phonetic.core import NATO_PHONETIC_ALPHABET
 
 from . import config
+from ._zip_util import normalize_zip
 
 
 def _set_cell_shading(cell, hex_color: str) -> None:
@@ -23,9 +25,17 @@ def _set_cell_shading(cell, hex_color: str) -> None:
     tc_pr.append(shading)
 
 
+_DETERMINISTIC_EPOCH = datetime(2024, 1, 1, 0, 0, 0)
+
+
 def build_docx(dest: Path) -> None:
     """Generate a printable DOCX of the NATO phonetic alphabet."""
     doc = Document()
+    doc.core_properties.author = "Matt Troutman"
+    doc.core_properties.created = _DETERMINISTIC_EPOCH
+    doc.core_properties.modified = _DETERMINISTIC_EPOCH
+    doc.core_properties.last_modified_by = "build_assets"
+    doc.core_properties.revision = 1
 
     title = doc.add_paragraph()
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -69,3 +79,4 @@ def build_docx(dest: Path) -> None:
     footer_run.font.color.rgb = RGBColor(0x33, 0x33, 0x33)
 
     doc.save(str(dest))
+    normalize_zip(dest)
