@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Pre-push hook: regenerate printable assets and fail if they're stale.
+set -euo pipefail
+
+if ! command -v uv >/dev/null 2>&1; then
+    echo "pre-push: uv not on PATH; skipping asset freshness check." >&2
+    exit 0
+fi
+
+echo "pre-push: regenerating printable assets..."
+uv sync --extra build >/dev/null
+uv run python -m scripts.build_assets >/dev/null
+
+ASSETS=(
+    "Nato Phonetic Alphabet - PDF.pdf"
+    "Nato Phonetic Alphabet (Landscape) - PDF.pdf"
+    "Nato Phonetic Alphabet - Microsoft Word.docx"
+    "Nato Phonetic Alphabet - EPub.epub"
+)
+
+if ! git diff --quiet -- "${ASSETS[@]}"; then
+    echo
+    echo "pre-push: generated assets are stale. Inspect with:" >&2
+    echo "  git diff -- \"Nato Phonetic Alphabet\"*" >&2
+    echo "Stage the changes, commit, and retry the push." >&2
+    exit 1
+fi
+
+echo "pre-push: assets fresh, proceeding."

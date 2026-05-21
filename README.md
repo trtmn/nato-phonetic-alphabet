@@ -134,7 +134,7 @@ phonetic download --list
 phonetic open --force
 ```
 
-Available slugs: `pdf`, `pdf-landscape`, `epub`, `docx`, `odt`, `pages`, `pages-landscape`.
+Available slugs: `pdf`, `pdf-landscape`, `epub`, `docx`.
 
 ### Development
 
@@ -154,6 +154,41 @@ nato-phonetic-alphabet/
 ```bash
 pytest tests/
 ```
+
+#### Regenerating printable assets
+
+The printable PDFs, DOCX, and EPub files in the repo root are generated
+from `scripts/build_assets/`. They must stay in sync with the
+generator — CI fails the build otherwise.
+
+```bash
+make build-assets
+```
+
+**Recommended:** enable the pre-push hook so a stale-asset push is
+caught locally before CI rejects it:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+**Alternative:** integrate with the `pre-commit` framework by adding to
+your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: local
+  hooks:
+    - id: build-assets
+      name: regenerate printable assets
+      entry: make build-assets
+      language: system
+      pass_filenames: false
+      stages: [pre-push]
+```
+
+If you only edit the alphabet data or the layout config in
+`scripts/build_assets/config.py`, run `make build-assets` before
+committing.
 
 #### Contributing
 1. Fork the repository

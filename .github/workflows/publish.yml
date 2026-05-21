@@ -14,6 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v3
+      - run: uv sync --extra build
+      - name: Regenerate printable assets
+        run: uv run python -m scripts.build_assets
+      - name: Verify committed assets match generator output
+        run: |
+          git diff --exit-status -- \
+            "Nato Phonetic Alphabet - PDF.pdf" \
+            "Nato Phonetic Alphabet (Landscape) - PDF.pdf" \
+            "Nato Phonetic Alphabet - Microsoft Word.docx" \
+            "Nato Phonetic Alphabet - EPub.epub"
       - run: uv build
       - uses: actions/upload-artifact@v4
         with:
