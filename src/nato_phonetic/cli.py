@@ -7,12 +7,12 @@ from rich.box import ROUNDED
 from rich.panel import Panel
 from rich.prompt import Prompt
 
+from . import __version__ as PROJECT_VERSION
 from .core import spell_word, get_full_alphabet
 
 console = Console()
 
 PROJECT_NAME = "phonetic"
-PROJECT_VERSION = "0.2.0"
 PROJECT_DESC = (
     "A beautiful CLI for the NATO phonetic alphabet built with "
     "Python, Click, and Rich."
