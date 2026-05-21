@@ -31,3 +31,13 @@ def test_build_docx_writes_valid_docx(tmp_path: Path) -> None:
         names = zf.namelist()
     assert "word/document.xml" in names
     assert "[Content_Types].xml" in names
+
+
+def test_build_epub_writes_valid_epub(tmp_path: Path) -> None:
+    dest = tmp_path / "out.epub"
+    build_epub(dest)
+    assert dest.exists()
+    with zipfile.ZipFile(dest) as zf:
+        names = zf.namelist()
+        assert "mimetype" in names
+        assert zf.read("mimetype").strip() == b"application/epub+zip"
