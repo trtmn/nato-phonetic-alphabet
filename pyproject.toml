@@ -37,6 +37,7 @@ dev = [
 
 [project.scripts]
 phonetic = "nato_phonetic.__main__:main"
+phonetic-nato = "nato_phonetic.__main__:main"
 
 [project.urls]
 Homepage = "https://trtmn.io/nato-phonetic-alphabet"
