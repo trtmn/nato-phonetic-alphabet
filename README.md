@@ -1,6 +1,6 @@
 # nato-phonetic-alphabet
 Printable / Remixable Nato Phonetic Alphabet page with a beautiful command-line interface.
-![Social Image](https://codeberg.org/trtmn/nato-phonetic-alphabet/raw/branch/main/Social%20Image.png)
+![Social Image](https://github.com/trtmn/nato-phonetic-alphabet/raw/main/Social%20Image.png)
 
 Project page is hosted at https://trtmn.io/nato-phonetic-alphabet
 
@@ -18,35 +18,47 @@ A beautiful and easy-to-use CLI built with Python 3.11, Click, and Rich for disp
 
 ### Installation
 
-#### Prerequisites
-- Python 3.11 or higher
-- pip (Python package installer)
+#### Option 1: uv / uvx (Recommended)
 
-#### Setup
+Try it once without installing:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://codeberg.org/trtmn/nato-phonetic-alphabet.git
-   cd nato-phonetic-alphabet
-   ```
+```bash
+uvx phonetic-nato
+```
 
-2. **Create and activate virtual environment:**
-   ```bash
-   python3.11 -m venv .venv
-   source .venv/bin/activate  # On macOS/Linux
-   # or
-   .venv\Scripts\activate     # On Windows
-   ```
+Install it as a persistent CLI:
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+uv tool install phonetic-nato
+```
 
-4. **Install the CLI:**
-   ```bash
-   pip install -e .
-   ```
+Don't have `uv` yet? See the [uv install guide](https://docs.astral.sh/uv/getting-started/installation/) (one-line installer for macOS, Linux, and Windows).
+
+#### Option 2: Homebrew (macOS)
+
+```bash
+# Install from local formula (development)
+brew install Formula/phonetic-nato.rb
+
+# Or install from tap (when published)
+brew tap trtmn/phonetic-nato
+brew install phonetic-nato
+```
+
+#### Option 3: pip
+
+```bash
+pip install phonetic-nato
+```
+
+#### From source (development)
+
+```bash
+git clone https://github.com/trtmn/nato-phonetic-alphabet.git
+cd nato-phonetic-alphabet
+uv sync --dev
+uv run phonetic --help
+```
 
 ### Usage
 
@@ -115,8 +127,7 @@ nato-phonetic-alphabet/
 ├── src/                   # Source code
 │   └── nato_phonetic/     # Main package
 ├── tests/                 # Test files
-├── requirements.txt       # Python dependencies
-├── pyproject.toml         # Project configuration
+├── pyproject.toml         # Project configuration & dependencies
 └── README.md             # This file
 ```
 
