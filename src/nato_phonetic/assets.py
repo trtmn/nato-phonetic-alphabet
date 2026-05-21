@@ -43,9 +43,6 @@ ASSETS: dict[str, Asset] = {
         Asset("pdf-landscape", "Nato Phonetic Alphabet (Landscape) - PDF.pdf", "Printable PDF (landscape)"),
         Asset("epub", "Nato Phonetic Alphabet - EPub.epub", "EPub for e-readers"),
         Asset("docx", "Nato Phonetic Alphabet - Microsoft Word.docx", "Microsoft Word"),
-        Asset("odt", "Nato Phonetic Alphabet - Open Doc Format.odt", "OpenDocument Text"),
-        Asset("pages", "Nato Phonetic Alphabet.pages", "Apple Pages (portrait)"),
-        Asset("pages-landscape", "Nato Phonetic Alphabet Landscape.pages", "Apple Pages (landscape)"),
     )
 }
 

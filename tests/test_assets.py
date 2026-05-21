@@ -20,6 +20,10 @@ def test_every_asset_has_filename_and_description():
         assert asset.description, f"{slug} missing description"
 
 
+def test_catalog_contains_exactly_four_slugs():
+    assert set(assets.ASSETS) == {"pdf", "pdf-landscape", "epub", "docx"}
+
+
 def test_default_downloads_dir_is_under_home():
     dest = assets.default_downloads_dir()
     assert dest == Path.home() / "Downloads"
