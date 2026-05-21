@@ -1,5 +1,7 @@
 """EPub generator using ebooklib."""
 
+import re
+import zipfile
 from pathlib import Path
 
 from ebooklib import epub
@@ -8,6 +10,11 @@ from nato_phonetic.core import NATO_PHONETIC_ALPHABET
 
 from . import config
 from ._zip_util import normalize_zip
+
+_FIXED_MODIFIED = b"2024-01-01T00:00:00Z"
+_MODIFIED_RE = re.compile(
+    rb'(<meta property="dcterms:modified">)[^<]+(</meta>)'
+)
 
 
 def _row_html(letter: str) -> str:
@@ -56,4 +63,25 @@ def build_epub(dest: Path) -> None:
     book.spine = ["nav", chapter]
 
     epub.write_epub(str(dest), book)
+    _force_fixed_modified(dest)
     normalize_zip(dest)
+
+
+def _force_fixed_modified(epub_path: Path) -> None:
+    """Override the dcterms:modified value ebooklib injects with our fixed epoch."""
+    with zipfile.ZipFile(epub_path, "r") as src:
+        members = [
+            (info, src.read(info.filename))
+            for info in src.infolist()
+        ]
+    rewritten = []
+    for info, data in members:
+        if info.filename.endswith(".opf"):
+            data = _MODIFIED_RE.sub(
+                rb"\g<1>" + _FIXED_MODIFIED + rb"\g<2>",
+                data,
+            )
+        rewritten.append((info, data))
+    with zipfile.ZipFile(epub_path, "w") as dst:
+        for info, data in rewritten:
+            dst.writestr(info, data)
