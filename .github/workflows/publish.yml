@@ -19,11 +19,11 @@ jobs:
         run: uv run python -m scripts.build_assets
       - name: Verify committed assets match generator output
         run: |
-          git diff --exit-status -- \
-            "Nato Phonetic Alphabet - PDF.pdf" \
-            "Nato Phonetic Alphabet (Landscape) - PDF.pdf" \
-            "Nato Phonetic Alphabet - Microsoft Word.docx" \
-            "Nato Phonetic Alphabet - EPub.epub"
+          if ! git diff --quiet -- 'Nato Phonetic Alphabet*'; then
+            echo "Generated assets disagree with committed versions:"
+            git status --short -- 'Nato Phonetic Alphabet*'
+            exit 1
+          fi
       - run: uv build
       - uses: actions/upload-artifact@v4
         with:
