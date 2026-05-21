@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test format lint clean build hatch-build hatch-clean bump-patch bump-minor bump-major
+.PHONY: help install install-dev test format lint clean build hatch-build hatch-clean bump-patch bump-minor bump-major build-assets
 
 # Use virtual environment Python and pip explicitly
 PYTHON := .venv/bin/python
@@ -54,6 +54,10 @@ bump-minor: ## Bump minor version (0.1.0 -> 0.2.0)
 
 bump-major: ## Bump major version (0.1.0 -> 1.0.0)
 	.venv/bin/bump-my-version bump major
+
+build-assets: ## Regenerate printable assets (PDF, DOCX, EPub) in repo root
+	uv sync --extra build
+	uv run python -m scripts.build_assets
 
 # Hatch commands
 hatch-build: ## Build package using Hatch
