@@ -110,10 +110,12 @@ def build_pdf(landscape: bool, dest: Path) -> None:
     ]
 
     col_widths = [0.6 * inch, 2.4 * inch, 0.6 * inch, 2.4 * inch]
+    row_height = config.ROW_HEIGHT
     if landscape:
         col_widths = [0.7 * inch, 3.5 * inch, 0.7 * inch, 3.5 * inch]
+        row_height = config.ROW_HEIGHT - 6
 
-    table = Table(table_rows, colWidths=col_widths, rowHeights=config.ROW_HEIGHT)
+    table = Table(table_rows, colWidths=col_widths, rowHeights=row_height)
     style_cmds: list[tuple] = [
         ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor(config.GRID_COLOR)),
         ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
