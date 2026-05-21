@@ -90,6 +90,8 @@ Available commands:
 - `interactive` - Enter interactive mode for spelling words
 - `print` - Generate formatted output for printing
 - `list` - Display the complete NATO phonetic alphabet
+- `open [slug]` - Download (or reuse) a printable asset and open it with the OS default handler. Default slug is the portrait PDF.
+- `download [slug]` - Download a printable asset to `~/Downloads` (use `--list` to see slugs, `-o` for a custom directory, `--force` to re-download)
 
 #### Examples
 
@@ -106,6 +108,33 @@ phonetic spell "WORLD"
 phonetic interactive
 # Enter words to spell them out interactively
 ```
+
+#### Printable assets
+
+The project ships printable PDFs, an EPub, Word/ODT documents, and Apple Pages
+sources alongside the source on Codeberg. The CLI can grab any of them
+straight to your Downloads folder.
+
+```bash
+# Open the portrait PDF (downloads to ~/Downloads, then opens in your default viewer)
+phonetic open
+
+# Other printable variants
+phonetic open pdf-landscape
+phonetic open epub
+
+# Download without opening
+phonetic download docx
+phonetic download odt -o ~/Documents/nato/
+
+# See every available asset
+phonetic download --list
+
+# Re-download a stale copy
+phonetic open --force
+```
+
+Available slugs: `pdf`, `pdf-landscape`, `epub`, `docx`, `odt`, `pages`, `pages-landscape`.
 
 ### Development
 

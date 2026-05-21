@@ -7,7 +7,10 @@ from rich.box import ROUNDED
 from rich.panel import Panel
 from rich.prompt import Prompt
 
+from pathlib import Path
+
 from . import __version__ as PROJECT_VERSION
+from . import assets as _assets
 from .core import spell_word, get_full_alphabet
 
 console = Console()
@@ -46,17 +49,21 @@ class PhoneticGroup(click.Group):
         # Commands section
         console.print(Panel.fit(
             "interactive  Enter interactive mode\n"
-            "list         Show full alphabet",
+            "list         Show full alphabet\n"
+            "open         Open a printable asset (default: portrait PDF)\n"
+            "download     Download a printable asset to ~/Downloads",
             border_style="yellow",
             title="Commands"
         ))
         console.print()
-        
+
         # Examples section
         console.print(Panel.fit(
-            "[cyan]phonetic 'HELLO'[/cyan]     # Spell out HELLO\n"
-            "[cyan]phonetic interactive[/cyan] # Interactive mode\n"
-            "[cyan]phonetic list[/cyan]        # Show full alphabet",
+            "[cyan]phonetic 'HELLO'[/cyan]            # Spell out HELLO\n"
+            "[cyan]phonetic interactive[/cyan]       # Interactive mode\n"
+            "[cyan]phonetic list[/cyan]              # Show full alphabet\n"
+            "[cyan]phonetic open[/cyan]              # Open printable PDF\n"
+            "[cyan]phonetic download --list[/cyan]   # List downloadable assets",
             border_style="magenta",
             title="Examples"
         ))
@@ -100,6 +107,44 @@ def interactive_cmd() -> None:
 def list_cmd() -> None:
     """Display the complete NATO phonetic alphabet."""
     print_alphabet_command()
+
+
+@main.command(
+    'open',
+    short_help="Open a printable asset (default: portrait PDF)",
+    help="Download (or reuse) an asset and open it with your OS default handler.",
+)
+@click.argument('slug', required=False, default=_assets.DEFAULT_SLUG)
+@click.option('-o', '--output', type=click.Path(file_okay=False, path_type=Path), help="Directory to save into (default: ~/Downloads).")
+@click.option('-f', '--force', is_flag=True, help="Re-download even if the file already exists.")
+def open_cmd(slug: str, output: Path | None, force: bool) -> None:
+    try:
+        _assets.open_asset(slug, output, force=force, console=console)
+    except _assets.AssetError as exc:
+        raise click.ClickException(str(exc))
+
+
+@main.command(
+    'download',
+    short_help="Download a printable asset to ~/Downloads",
+    help="Download an asset without opening it.",
+)
+@click.argument('slug', required=False)
+@click.option('-o', '--output', type=click.Path(file_okay=False, path_type=Path), help="Directory to save into (default: ~/Downloads).")
+@click.option('-f', '--force', is_flag=True, help="Re-download even if the file already exists.")
+@click.option('-l', '--list', 'list_only', is_flag=True, help="List available assets and exit.")
+def download_cmd(slug: str | None, output: Path | None, force: bool, list_only: bool) -> None:
+    if list_only or slug is None:
+        _assets.list_assets(console)
+        if not list_only and slug is None:
+            console.print(
+                "\nPass a slug to download, e.g. [cyan]phonetic download pdf[/cyan].",
+            )
+        return
+    try:
+        _assets.download_asset(slug, output, force=force, console=console)
+    except _assets.AssetError as exc:
+        raise click.ClickException(str(exc))
 
 
 # Internal functions
