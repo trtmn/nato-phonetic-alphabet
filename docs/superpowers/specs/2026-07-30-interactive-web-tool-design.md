@@ -17,8 +17,9 @@ in a browser without installing anything.
 - Style it with Matt's trtmn brand (dark background, Martian Mono +
   Inter typography, accent color), minus the sidebar — this is a
   utility tool, not a resume-shaped document.
-- Let the user pick from 6 curated accent themes via a small color-swatch
-  picker, persisted across reloads.
+- Let the user pick from the same 7-color picker used on resume.trtmn.io
+  (red, orange, yellow, green, blue, purple, slate) via a small
+  color-swatch picker, persisted across reloads.
 - Zero build step, zero JS dependencies — plain HTML/CSS/JS that opens
   directly in a browser or can be hosted as a static file later.
 
@@ -71,13 +72,12 @@ New `web/` directory, entirely self-contained:
   centered single-column layout — no sidebar, no nav.
 - Martian Mono (uppercase, wide tracking) for the title and labels;
   Inter 300 for the output list, matching the brand's two-face system.
-- A small row of 6 color swatches (buttons) lets the user switch
-  accent theme instantly by setting `data-theme` on `<html>`:
-  **teal (default), blue, green, purple, red, slate** — a representative
-  spread across cool/warm/neutral rather than all 17 brand themes, to
-  keep the picker small and scannable.
+- A row of 7 color swatches (buttons) lets the user switch accent
+  theme instantly by setting `data-theme` on `<html>`: **red, orange,
+  yellow, green, blue, purple, slate** — the same 7-color picker used
+  on resume.trtmn.io, with **blue as the default**.
 - Selected theme is saved to `localStorage` and restored on page load.
-- Color values for these 6 themes are hand-copied from the trtmn-brand
+- Color values for these 7 themes are hand-copied from the trtmn-brand
   skill's `references/tokens.md` into `style.css` as CSS custom
   properties per `[data-theme="..."]` selector — no external stylesheet
   dependency.
