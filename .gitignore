@@ -175,3 +175,7 @@ Desktop.ini
 *.txt
 !requirements.txt
 !requirements-dev.txt 
+# Cloudflare Workers
+node_modules/
+.wrangler/
+.dev.vars*

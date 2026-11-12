@@ -2,7 +2,18 @@
 Printable / Remixable Nato Phonetic Alphabet page with a beautiful command-line interface.
 ![Social Image](https://codeberg.org/trtmn/nato-phonetic-alphabet/raw/branch/main/Social%20Image.png)
 
-Project page is hosted at https://trtmn.io/nato-phonetic-alphabet
+Project page is hosted at https://trtmn.io/tools/nato-phonetic-alphabet
+
+## Web Version
+
+Type anything and see it spelled out in the NATO phonetic alphabet, live:
+**https://apps.trtmn.io/nato**
+
+The page is plain HTML/CSS/JS in [`web/`](web/) — no build step, no
+dependencies. It is served by a Cloudflare Worker (`worker/index.js`,
+configured in `wrangler.jsonc`) at the `/nato` path on `apps.trtmn.io`.
+Pushes to `main` that touch `web/`, `worker/`, or `wrangler.jsonc` deploy it
+via `.github/workflows/deploy-web.yml`.
 
 ## Command Line Interface
 

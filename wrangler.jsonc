@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nato-phonetic-alphabet",
+  "compatibility_date": "2026-11-12",
+  "main": "worker/index.js",
+  "assets": {
+    // The page is plain HTML/CSS/JS — no build step. The Worker only
+    // rewrites the /nato prefix so these files serve under
+    // apps.trtmn.io/nato/.
+    "directory": "./web",
+    "binding": "ASSETS"
+  },
+  // Public surface is the custom route only.
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "apps.trtmn.io/nato*", "zone_name": "trtmn.io" }
+  ]
+}

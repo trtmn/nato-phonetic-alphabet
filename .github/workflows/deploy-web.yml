@@ -1,0 +1,42 @@
+name: Deploy web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "worker/**"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy-web.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    # Production secrets only ever touch the default branch. A dispatch from
+    # another branch runs that branch's workflow, so the ref guard matters as
+    # much as the event guard.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    # Never cancel a deploy mid-flight.
+    concurrency:
+      group: deploy-web-main
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Wrangler 4.x requires Node >= 22.
+          node-version: 22
+      - name: Deploy to Cloudflare
+        # Pinned to the commit behind v3.15.0 rather than the mutable v3 tag:
+        # this action receives the production Cloudflare token.
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.160.1"
