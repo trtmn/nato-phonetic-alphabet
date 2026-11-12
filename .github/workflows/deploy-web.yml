@@ -1,0 +1,48 @@
+name: Deploy web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "worker/**"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy-web.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    # Only a push to main can deploy. There is deliberately no
+    # workflow_dispatch: a dispatch runs the workflow file from the selected
+    # ref, which would put this job's production token behind an editable
+    # file on a non-main branch.
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      github.repository == 'trtmn/nato-phonetic-alphabet'
+    runs-on: ubuntu-latest
+    # A protected environment (required reviewers / main-only deployment
+    # branch rule) is the platform-level gate for the Cloudflare token; the
+    # `if:` above is defence in depth, not the boundary.
+    environment: production
+    # Never cancel a deploy mid-flight.
+    concurrency:
+      group: deploy-web-main
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          # Wrangler 4.x requires Node >= 22.
+          node-version: 22
+      - name: Deploy to Cloudflare
+        # Pinned to the commit behind v3.15.0 rather than the mutable v3 tag:
+        # this action receives the production Cloudflare token.
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.160.1"

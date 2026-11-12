@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="blue">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NATO Phonetic Alphabet — Interactive Spelling Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <h1 class="title">NATO Phonetic Alphabet</h1>
+    <p class="tagline">// type something, spell it out</p>
+
+    <div class="theme-picker" role="group" aria-label="Accent color">
+      <button class="swatch" data-theme="red" style="--swatch: #dc2626" aria-label="Red"></button>
+      <button class="swatch" data-theme="orange" style="--swatch: #ea580c" aria-label="Orange"></button>
+      <button class="swatch" data-theme="yellow" style="--swatch: #ca8a04" aria-label="Yellow"></button>
+      <button class="swatch" data-theme="green" style="--swatch: #16a34a" aria-label="Green"></button>
+      <button class="swatch" data-theme="blue" style="--swatch: #3b82f6" aria-label="Blue"></button>
+      <button class="swatch" data-theme="purple" style="--swatch: #7c3aed" aria-label="Purple"></button>
+      <button class="swatch" data-theme="slate" style="--swatch: #475569" aria-label="Slate"></button>
+    </div>
+
+    <textarea id="input" class="input" placeholder="Type here..." autofocus></textarea>
+
+    <div id="output" class="output"></div>
+  </main>
+
+  <script src="nato-alphabet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
