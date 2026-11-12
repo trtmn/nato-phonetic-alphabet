@@ -6,6 +6,22 @@ const viewBtn = document.getElementById("view");
 const copyBtn = document.getElementById("copy");
 
 const BITS_PER_BYTE = 8;
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function circleNode(bit) {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 20 20");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("class", bit === "1" ? "circle filled" : "circle empty");
+
+  const circle = document.createElementNS(SVG_NS, "circle");
+  circle.setAttribute("cx", "10");
+  circle.setAttribute("cy", "10");
+  circle.setAttribute("r", "8.5");
+  svg.appendChild(circle);
+
+  return svg;
+}
 
 let circleView = false;
 // What the last render produced, so swap/copy act on the conversion
@@ -57,15 +73,17 @@ function renderBinaryLines(binaryText, circles) {
     if (!circles) {
       lineEl.textContent = line;
     } else {
-      for (const bit of line) {
-        if (bit === "1" || bit === "0") {
-          const bitEl = document.createElement("span");
-          bitEl.className = bit === "1" ? "one" : "zero";
-          bitEl.textContent = bit === "1" ? "●" : "○";
-          lineEl.appendChild(bitEl);
-        } else {
-          lineEl.appendChild(document.createTextNode(bit));
+      // Draw the bits rather than using ●/○ glyphs: the ○ glyph is too
+      // thin at small sizes and varies across fonts.
+      lineEl.setAttribute("role", "img");
+      lineEl.setAttribute("aria-label", line);
+      for (const byte of line.split(" ")) {
+        const byteEl = document.createElement("span");
+        byteEl.className = "byte";
+        for (const bit of byte) {
+          byteEl.appendChild(circleNode(bit));
         }
+        lineEl.appendChild(byteEl);
       }
     }
 

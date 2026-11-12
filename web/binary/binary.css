@@ -57,15 +57,30 @@
 }
 
 .output .line.circles {
-  font-size: 26px;
-  line-height: 1.6;
-  letter-spacing: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
 }
 
-.output .line.circles .one {
-  color: var(--accent-light);
+.output .byte {
+  display: inline-flex;
+  gap: 5px;
 }
 
-.output .line.circles .zero {
-  color: #64748b;
+.output .circle {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+.output .circle.filled {
+  fill: var(--accent-light);
+}
+
+.output .circle.empty {
+  fill: none;
+  /* A drawn stroke stays crisp; the ○ glyph was too thin to read. */
+  stroke: #94a3b8;
+  stroke-width: 2.5;
 }
