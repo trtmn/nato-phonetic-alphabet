@@ -16,6 +16,7 @@
     { "pattern": "apps.trtmn.io/nato*", "zone_name": "trtmn.io" },
     { "pattern": "apps.trtmn.io/binary*", "zone_name": "trtmn.io" },
     { "pattern": "apps.trtmn.io/style.css", "zone_name": "trtmn.io" },
-    { "pattern": "apps.trtmn.io/theme.js", "zone_name": "trtmn.io" }
+    { "pattern": "apps.trtmn.io/theme.js", "zone_name": "trtmn.io" },
+    { "pattern": "apps.trtmn.io/footer.js", "zone_name": "trtmn.io" }
   ]
 }

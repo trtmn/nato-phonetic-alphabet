@@ -15,10 +15,12 @@ dependencies — and share one stylesheet and theme picker:
   circle display: **https://apps.trtmn.io/binary**
 
 Layout: each app lives in `web/<app>/` and the shared `web/style.css` +
-`web/theme.js` are served beside them. The Worker (`worker/index.js`,
-configured in `wrangler.jsonc`) routes `apps.trtmn.io/<app>*` to the matching
-directory. Pushes to `main` that touch `web/`, `worker/`, or `wrangler.jsonc`
-deploy via `.github/workflows/deploy-web.yml`.
+`web/theme.js` are served beside them. A shared footer
+(`web/footer.js`) links every app; add an entry to its `APPS` list when
+you add a page. The Worker (`worker/index.js`, configured in
+`wrangler.jsonc`) routes `apps.trtmn.io/<app>*` to the matching directory.
+Pushes to `main` that touch `web/`, `worker/`, or `wrangler.jsonc` deploy via
+`.github/workflows/deploy-web.yml`.
 
 ## Command Line Interface
 

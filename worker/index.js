@@ -5,7 +5,7 @@
 // an app's bare path just redirects to its trailing-slash form.
 
 const APPS = new Set(["nato", "binary"]);
-const SHARED = new Set(["/style.css", "/theme.js"]);
+const SHARED = new Set(["/style.css", "/theme.js", "/footer.js"]);
 
 export default {
   async fetch(request, env) {
