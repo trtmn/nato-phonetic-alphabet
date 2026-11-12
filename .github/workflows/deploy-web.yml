@@ -8,19 +8,19 @@ on:
       - "worker/**"
       - "wrangler.jsonc"
       - ".github/workflows/deploy-web.yml"
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   deploy:
-    # Production secrets only ever touch the default branch. A dispatch from
-    # another branch runs that branch's workflow, so the ref guard matters as
-    # much as the event guard.
+    # Only a push to main can deploy. There is deliberately no
+    # workflow_dispatch: a dispatch runs the workflow file from the selected
+    # ref, which would put this job's production token behind an editable
+    # file on a non-main branch.
     if: >-
       github.ref == 'refs/heads/main' &&
-      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      github.repository == 'trtmn/nato-phonetic-alphabet'
     runs-on: ubuntu-latest
     # A protected environment (required reviewers / main-only deployment
     # branch rule) is the platform-level gate for the Cloudflare token; the

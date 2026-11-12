@@ -41,7 +41,14 @@ function makeRow(charText, wordText, extraClass) {
   return row;
 }
 
+// Follow new output only when the reader is already at (or near) the
+// bottom, so scrolling up to re-read something doesn't get yanked away.
+function isNearBottom() {
+  return output.scrollHeight - output.scrollTop - output.clientHeight < 40;
+}
+
 function render() {
+  const follow = isNearBottom();
   output.textContent = "";
   for (const char of input.value) {
     const upper = char.toUpperCase();
@@ -53,6 +60,9 @@ function render() {
     } else {
       output.appendChild(makeRow(char, char));
     }
+  }
+  if (follow) {
+    output.scrollTop = output.scrollHeight;
   }
 }
 
