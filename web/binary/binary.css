@@ -52,12 +52,14 @@
 
 .output .line.text {
   color: #f1f5f9;
+  font-size: 18px;
+  line-height: 1.7;
 }
 
 .output .line.circles {
-  font-size: 19px;
-  line-height: 1.5;
-  letter-spacing: 3px;
+  font-size: 26px;
+  line-height: 1.6;
+  letter-spacing: 4px;
 }
 
 .output .line.circles .one {
