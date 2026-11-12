@@ -1,28 +1,27 @@
-// Serves the static page from ./web under apps.trtmn.io/nato/.
+// Serves the static tools in ./web under apps.trtmn.io/<app>/.
 //
-// Worker routes on a path (apps.trtmn.io/nato*) still hand the Worker the
-// full pathname, so strip the mount prefix before asking the ASSETS binding
-// for a file. Relative URLs in index.html then resolve under /nato/.
+// The asset tree mirrors the URL paths (web/nato/, web/binary/, plus the
+// shared style.css and theme.js at the root), so no rewriting is needed:
+// an app's bare path just redirects to its trailing-slash form.
 
-const PREFIX = "/nato";
+const APPS = new Set(["nato", "binary"]);
+const SHARED = new Set(["/style.css", "/theme.js"]);
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const firstSegment = url.pathname.split("/")[1];
 
-    // /nato -> /nato/, so relative assets resolve correctly.
-    if (url.pathname === PREFIX) {
-      url.pathname = `${PREFIX}/`;
+    // /nato -> /nato/, so relative asset URLs resolve inside the app.
+    if (APPS.has(firstSegment) && url.pathname === `/${firstSegment}`) {
+      url.pathname = `/${firstSegment}/`;
       return Response.redirect(url.toString(), 308);
     }
 
-    if (!url.pathname.startsWith(`${PREFIX}/`)) {
-      return new Response("Not found", { status: 404 });
+    if (APPS.has(firstSegment) || SHARED.has(url.pathname)) {
+      return env.ASSETS.fetch(request);
     }
 
-    // A request built from the original URL plus the rewritten path, and
-    // from the original request so method, headers, and body carry over.
-    url.pathname = url.pathname.slice(PREFIX.length);
-    return env.ASSETS.fetch(new Request(url, request));
+    return new Response("Not found", { status: 404 });
   },
 };
