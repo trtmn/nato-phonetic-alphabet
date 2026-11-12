@@ -1,0 +1,69 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 10px;
+}
+
+.tool {
+  font-family: "Martian Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--bg-sidebar);
+  color: #f1f5f9;
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.tool:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.tool[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.tool:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hint {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.output .line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.output .line.text {
+  color: #f1f5f9;
+}
+
+.output .line.circles {
+  font-size: 19px;
+  line-height: 1.5;
+  letter-spacing: 3px;
+}
+
+.output .line.circles .one {
+  color: var(--accent-light);
+}
+
+.output .line.circles .zero {
+  color: #64748b;
+}

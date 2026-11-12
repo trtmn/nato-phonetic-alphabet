@@ -4,16 +4,21 @@ Printable / Remixable Nato Phonetic Alphabet page with a beautiful command-line 
 
 Project page is hosted at https://trtmn.io/tools/nato-phonetic-alphabet
 
-## Web Version
+## Web Tools
 
-Type anything and see it spelled out in the NATO phonetic alphabet, live:
-**https://apps.trtmn.io/nato**
+Both tools are plain HTML/CSS/JS in [`web/`](web/) — no build step, no
+dependencies — and share one stylesheet and theme picker:
 
-The page is plain HTML/CSS/JS in [`web/`](web/) — no build step, no
-dependencies. It is served by a Cloudflare Worker (`worker/index.js`,
-configured in `wrangler.jsonc`) at the `/nato` path on `apps.trtmn.io`.
-Pushes to `main` that touch `web/`, `worker/`, or `wrangler.jsonc` deploy it
-via `.github/workflows/deploy-web.yml`.
+- **NATO spelling** — type anything and see it spelled out in the NATO
+  phonetic alphabet, live: **https://apps.trtmn.io/nato**
+- **Binary converter** — text to UTF-8 binary and back, with a filled/empty
+  circle display: **https://apps.trtmn.io/binary**
+
+Layout: each app lives in `web/<app>/` and the shared `web/style.css` +
+`web/theme.js` are served beside them. The Worker (`worker/index.js`,
+configured in `wrangler.jsonc`) routes `apps.trtmn.io/<app>*` to the matching
+directory. Pushes to `main` that touch `web/`, `worker/`, or `wrangler.jsonc`
+deploy via `.github/workflows/deploy-web.yml`.
 
 ## Command Line Interface
 

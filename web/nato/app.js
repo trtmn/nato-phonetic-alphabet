@@ -1,29 +1,5 @@
-const THEMES = ["red", "orange", "yellow", "green", "blue", "purple", "slate"];
-const DEFAULT_THEME = "blue";
-const STORAGE_KEY = "nato-theme";
-
 const input = document.getElementById("input");
 const output = document.getElementById("output");
-const swatches = document.querySelectorAll(".swatch");
-
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  swatches.forEach((swatch) => {
-    swatch.classList.toggle("active", swatch.dataset.theme === theme);
-  });
-}
-
-function setTheme(theme) {
-  applyTheme(theme);
-  localStorage.setItem(STORAGE_KEY, theme);
-}
-
-swatches.forEach((swatch) => {
-  swatch.addEventListener("click", () => setTheme(swatch.dataset.theme));
-});
-
-const savedTheme = localStorage.getItem(STORAGE_KEY);
-applyTheme(THEMES.includes(savedTheme) ? savedTheme : DEFAULT_THEME);
 
 function makeRow(charText, wordText, extraClass) {
   const row = document.createElement("div");
